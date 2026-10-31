@@ -223,7 +223,7 @@
                 levelSize: 7,
                 gravityCharges: 5,
                 dialogue: {
-                    before: ["Welcome to the Gravitational Demo! I am TutorialBot, and I'm here to show you how to play the game.","Use the Arrow Keys or WASD to change gravity.", "Changing the gravity costs one gravity charge.", "You can see how many gravity charges you have in the top-left corner.", "If you make a mistake, click the red reset charge below your gravity charges.", "Or just press r. Whatever's easiest."],
+                    before: ["Welcome to the Gravitational Demo! I am TutorialBot, and I'm here to show you how to play the game.","Ignore the empty space to the left of the test, this is an early demo only accessible through a link, and this space will be filled with something else when I get around to coding it.","Use the Arrow Keys or WASD to change gravity.", "Changing the gravity costs one gravity charge.", "You can see how many gravity charges you have in the top-left corner.", "If you make a mistake, click the red reset charge below your gravity charges.", "Or just press r. Whatever's easiest.", "Get the cube with the red light to the energy transmitter."],
                     after: ["Great job! Continue on to the next level."],
                 },
                 map:[
@@ -239,6 +239,10 @@
             2: {
                 levelSize: 9,
                 gravityCharges: 5,
+                dialogue: {
+                    before: ["Gravity charge bubbles will give you one extra gravity charge when collected."],
+                    after: ["Not bad! Continue to level 3."],
+                },
                 map:[
                     "bbbbbbbbb",
                     "b  b    b",
@@ -254,6 +258,10 @@
             3: {
                 levelSize: 10,
                 gravityCharges: 8,
+                dialogue: {
+                    before: ["Electric Spikes will make anything that touches them explode.", "So... yeah. Don't touch them."],
+                    after: ["Well done! Here comes level 4..."],
+                },
                 map:[
                     "bbbbbbbbbb",
                     "bP  b  ++b",
@@ -270,6 +278,10 @@
             4: {
                 levelSize: 13,
                 gravityCharges: 8,
+                dialogue: {
+                    before: ["You will find that not every gravity charge bubble has to be collected to beat a level.", "As a general rule, if you take more moves to get the gravity charges than the amount of charges you earn, you are doing something wrong.", "That said, calculate this level carefully."],
+                    after: ["Good job! You found the solution!"],
+                },
                 map:[
                     "bbbbbbbbbbbbb",
                     "b           b",
@@ -289,6 +301,10 @@
             5: {
                 levelSize: 15,
                 gravityCharges: 11,
+                dialogue: {
+                    before: ["This level is a bit more complicated than the others. Good luck."],
+                    after: ["Not bad! But things are about to get a lot harder."],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "bb            b",
@@ -310,6 +326,10 @@
             6: {
                 levelSize: 15,
                 gravityCharges: 11,
+                dialogue: {
+                    before: ["Crates act just like the player, but they cannot activate the exit.", "Only the player can beat the level. This means that you can sometimes explode crates on spikes without losing the level.", "Use this information... wisely."],
+                    after: ["Well done! Onto level 7!"],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "b          bbbb",
@@ -331,6 +351,10 @@
             7: {
                 levelSize: 15,
                 gravityCharges: 8,
+                dialogue: {
+                    before: ["This one's a bit more complicated. Find a way to clear the crates blocking the player."],
+                    after: ["Good job! Onto the next level!"],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "bPcc          b",
@@ -352,6 +376,10 @@
             8: {
                 levelSize: 15,
                 gravityCharges: 1,
+                dialogue: {
+                    before: ["As you can see, you only get one gravity charge in this level.", "Use it wisely."],
+                    after: ["Moving on to the next room..."],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "b            @b",
@@ -373,6 +401,10 @@
             9: {
                 levelSize: 15,
                 gravityCharges: 11,
+                dialogue: {
+                    before: ["As you will discover in this level, crates don't always get in your way.", "Sometimes you need them to beat a level."],
+                    after: ["Time for the final challenge..."],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "b     +      bb",
@@ -394,6 +426,10 @@
             10: {
                 levelSize: 15,
                 gravityCharges: 16,
+                dialogue: {
+                    before: ["Well, this is it.", "The final level of the demo.", "If you want to see more, you'll have to wait until the full game comes out on STEAM.", "But until then, put everything you've learned together in this epic finale."],
+                    after: ["That's all for now! The full game will have 100 levels, a story, many other mechanics, and several npcs."],
+                },
                 map:[
                     "bbbbbbbbbbbbbbb",
                     "bbb   bb      b",
