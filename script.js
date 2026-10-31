@@ -1,9 +1,13 @@
     const mainCanvas = document.getElementById("main-canvas");
     const gameCanvas = document.getElementById("game-canvas");
+    const dialogueCanvas = document.getElementById("dialogue-canvas");
     const c = mainCanvas.getContext('2d');
     const ctx = gameCanvas.getContext('2d');
+    const context = dialogueCanvas.getContext('2d');
     mainCanvas.width = 480;
     mainCanvas.height = 270;
+    dialogueCanvas.width = 480;
+    dialogueCanvas.height = 270;
     gameCanvas.width = 1200;
     gameCanvas.height = 1200;
     let gameOn = false;
@@ -15,6 +19,9 @@
 
     c.imageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
+    context.imageSmoothingEnabled = false;   
+
+    let fontOrder = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     let key = {
         left: false,
@@ -57,6 +64,8 @@
     }
 
     let images = {
+        font: new Image(),
+        prompt: new Image(),
         player: new Image(),
         crate: new Image(),
         spike: new Image(),
@@ -111,6 +120,8 @@
         levels: [],
         slider: new Image(),
         settings: new Image(),
+        receiver: new Image(),
+        dialogueBox: new Image()
     }
     for(let i = 0; i < 256; i++){
         images.blocks.push(new Image());
@@ -126,7 +137,9 @@
         images.timedBlock.push(new Image());
         images.timedBlock[i-1].src = "Images/timedBlock/" + i + ".png";
     }
-
+    
+    images.font.src = "Images/font.png";
+    images.dialogueBox.src = "Images/dialogueBox.png";
     images.settings.src = "Images/settings.png";
     images.leftArrow.src = "Images/leftArrow.png";
     images.rightArrow.src = "Images/rightArrow.png";
@@ -159,6 +172,7 @@
     images.explosion.src = "Images/explosion.png";
     images.smallerExplosion.src = "Images/smallerExplosion.png";
     images.playButton.src = "Images/playButton.png";
+    images.receiver.src = "Images/receiver.png";
     for(let i = 0; i < images.button.unpressed.length; i++){
         images.button.unpressed[i].src = "Images/button/unpressed" + (parseInt(i)+1).toString() + ".png";
     }
@@ -178,6 +192,7 @@
     images.mine.src = "Images/mine.png";
     images.lockedLevel.src = "Images/lockedLevel.png";
     images.slider.src = "Images/slider.png";
+    images.prompt.src = "Images/prompt.png";
 
     for(let i = 0; i < images.buttonBlock.length; i++){
         images.buttonBlock[i].src = "Images/buttonBlock/" + (parseInt(i)+1).toString() + ".png";
@@ -189,7 +204,7 @@
         sfxVolume: 0.75
     }
     
-    let levelsUnlocked = 17;
+    let levelsUnlocked = 1;
 
     function startGame(level = levelsUnlocked){
         gameOn = true;
@@ -205,314 +220,12 @@
         let currentLevel = level;
         let levels = {
             1: {
-                levelSize: 6,
-                gravityCharges: 3,
-                map:[
-                    "bbbbbb",
-                    "bP   b",
-                    "bbbb b",
-                    "bbbb b",   
-                    "b@   b",
-                    "bbbbbb",
-                ]
-            },
-            2: {
-                levelSize: 15,
-                gravityCharges: 5,
-                map:[
-                    "bbbbbbbbbbbbbbb",
-                    "b            @b",
-                    "b           bbb",
-                    "b  b          b",
-                    "b             b",
-                    "bb            b",
-                    "b     +       b",
-                    "b+            b",
-                    "b             b",
-                    "b+            b",
-                    "b    b        b",
-                    "b +       +  bb",
-                    "bb  b         b",
-                    "bP    b       b",
-                    "bbbbbbbbbbbbbbb",
-                ]
-            },
-            3: {
-                levelSize: 7,
-                gravityCharges: 9,
-                map:[
-                    "bbbbbbb",
-                    "b> c @b",
-                    "bbbcbbb",
-                    "bbbcbbb",
-                    "bbbcbbb",
-                    "bbbPbbb",
-                    "bbbbbbb",
-                ]
-            },
-            4: {
-                levelSize: 16,
-                gravityCharges: 5,
-                map:[
-                    "bbbbbbbbbbbbbbbb",
-                    "bvvvvvvvvvvvvvbb",
-                    "bPc  +  +    S<b",
-                    "bb           s<b",
-                    "bbb           <b",
-                    "b>            <b",
-                    "b> S  +       <b",
-                    "b> s        s <b",
-                    "b>         S  <b",
-                    "b>  s       s <b",
-                    "b>S + + +   + <b",
-                    "b>          + <b",
-                    "b> S       ++S<b",
-                    "b> ^@^    s   <b",
-                    "bb^bbb^^^^^^^^bb",
-                    "bbbbbbbbbbbbbbbb",
-                ]
-            },
-            5: {
-                levelSize: 30,
-                gravityCharges: 28,
-                map:[
-                    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                    "b                            b",
-                    "b                            b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb  bbbbbbb b                b",
-                    "bb  bPccccccb                b",
-                    "bb  bcccccccb    @           b",
-                    "bb  bbbbbbbbb                b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bb                           b",
-                    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                ]
-            },
-            6: {
-                levelSize: 16,
-                gravityCharges: 28,
-                map:[
-                    "bbbbbbbbbbbbbbbb",
-                    "bbbbbbbbbbbbbbbb",
-                    "bbvvvvbbvvvvvvbb",
-                    "bb+s   +  +   bb",
-                    "bb  b        ^^b",
-                    "b>s+    b   <bbb",
-                    "b>    S    <bbbb",
-                    "bbbb       <bbbb",
-                    "bvvv +      <bbb",
-                    "b  +     +  sS@b",
-                    "b    s      bbbb",
-                    "b>s    +      +b",
-                    "b   +     bbcb b",
-                    "b^         bcb b",
-                    "bb>+ s^^^^^bPb^b",
-                    "bbbbbbbbbbbbbbbb",
-                ]
-            },
-            7: {
-                levelSize: 9,
-                gravityCharges: 14,
-                map:[
-                    "bbbbbbbbb",
-                    "b@blSs cb",
-                    "bLbSs  cb",
-                    "b Ss   cb",
-                    "bbbb bbbb",
-                    "bbbb bbbb",
-                    "bbbb bbbb",
-                    "bP      b",
-                    "bbbbbbbbb",
-                ]
-            },
-            8: {
-                levelSize: 9,
-                gravityCharges: 15,
-                map:[
-                    "bbbbbbbbb",
-                    "b   +   b",
-                    "b+      b",
-                    "b  +   Lb",
-                    "b   @Ll+b",
-                    "blllLPL b",
-                    "bLLLlL+lb",
-                    "bccc   Lb",
-                    "bbbbbbbbb",
-                ]
-            },
-            9: {
-                levelSize: 8,
-                gravityCharges: 5,
-                map:[
-                    "bbbbbbbb",
-                    "b   b @b",
-                    "b^^   bb",
-                    "bbb    b",
-                    "b++   |b",
-                    "bbbb   b",
-                    "bP== + b",
-                    "bbbbbbbb",
-                ]
-            },
-            10: {
-                levelSize: 15,
-                gravityCharges: 21,
-                map:[
-                    "bbbbbbbbbbbbbbb",
-                    "b>     +      b",
-                    "bb +   bbbbb  b",
-                    "bP  S  Bbbb>+ b",
-                    "bbbbbbbbbbbbbxb",
-                    "bcsSsS        b",
-                    "bbbbbb        b",
-                    "b   +b       +b",
-                    "b             b",
-                    "b b    +   +  b",
-                    "b   s       LLb",
-                    "bl          Lcb",
-                    "bxx b       LLb",
-                    "b@x+      + LBb",
-                    "bbbbbbbbbbbbbbb",
-                ]
-            },
-            11: {
-                levelSize: 10,
-                gravityCharges: 10,
-                map:[
-                    "bbbbbbbbbb",
-                    "blb    L@b",
-                    "bHb    LLb",
-                    "b        b",
-                    "bs       b",
-                    "b        b",
-                    "b S     Pb",
-                    "b    bbbbb",
-                    "b   c h+lb",
-                    "bbbbbbbbbb",
-                ]
-            },
-            12: {
-                levelSize: 15,
-                gravityCharges: 15,
-                buttonDirs: [Math.PI / 2],
-                buttonAssignments: [0],
-                buttonBlockAssignments: [0,0,0,0,0,0,0,0,0,0],
-                map:[
-                    "bbbbbbbbbbbbbbb",
-                    "b>  vvbDbvv  <b",
-                    "b>s +   b    <b",
-                    "b>    b b s  <b",
-                    "b>  S s      <b",
-                    "b>     b     <b",
-                    "b> s   +   S <b",
-                    "b>         S <b",
-                    "b> + <bPb>   <b",
-                    "bdddddbbbdddddb",
-                    "b>   <b@b>   <b",
-                    "b>      S   s<b",
-                    "b> S  ^    ^ <b",
-                    "bb^^^^b +  b^bb",
-                    "bbbbbbbbbbbbbbb",
-                ]
-            },
-            13: {
-                levelSize: 8,
-                gravityCharges: 9,
-                buttonDirs: [Math.PI],
-                buttonAssignments: [0],
-                buttonBlockAssignments: [0],
-                map:[
-                    "bbbbbbbb",
-                    "b    ]@b",
-                    "b    bbb",
-                    "b    cPb",
-                    "b  bbbbb",
-                    "b     [b",
-                    "b bbbbbb",
-                    "bbbbbbbb",
-                ]
-            },
-            14: {
-                levelSize: 9,
-                gravityCharges: 9,
-                buttonDirs: [Math.PI],
-                buttonAssignments: [0],
-                buttonBlockAssignments: [0],
-                map:[
-                    "bbbbbbbbb",
-                    "b  cbbbbb",
-                    "b   +  Pb",
-                    "bs  bbbbb",
-                    "bc  ooo@b",
-                    "bS  bbbbb",
-                    "b   +  cb",
-                    "b   bbbbb",
-                    "bbbbbbbbb",
-                ]
-            },
-            15: {
-                levelSize: 9,
-                gravityCharges: 12,
-                buttonDirs: [Math.PI],
-                buttonAssignments: [0],
-                buttonBlockAssignments: [0],
-                timedBlockAssignments: [12,12,12,12,12,12,12,12],
-                map:[
-                    "bbbbbbbbb",
-                    "b     bbb",
-                    "b @  |  b",
-                    "b       b",
-                    "b  ttt  b",
-                    "b  tct  b",
-                    "b  tttb b",
-                    "bP +bb  b",
-                    "bbbbbbbbb",
-                ]
-            },
-            16: {
-                levelSize: 15,
-                gravityCharges: 19,
-                map:[
-                    "bbbbbbbbbbbbbbb",
-                    "b@x     b     b",
-                    "bxx         s b",
-                    "b       ===   b",
-                    "bS            b",
-                    "b             b",
-                    "b             b",
-                    "b            Bb",
-                    "b           bbb",
-                    "b      S +   <b",
-                    "bS         xxxb",
-                    "b          xBUb",
-                    "bxxxxxxxxxxxxxb",
-                    "bc  +  B   + Pb",
-                    "bbbbbbbbbbbbbbb",
-                ]
-            },
-            17: {
                 levelSize: 7,
                 gravityCharges: 5,
+                dialogue: {
+                    before: ["Welcome to the Gravitational Demo! I am TutorialBot, and I'm here to show you how to play the game.","Use the Arrow Keys or WASD to change gravity.", "Changing the gravity costs one gravity charge.", "You can see how many gravity charges you have in the top-left corner.", "If you make a mistake, click the red reset charge below your gravity charges.", "Or just press r. Whatever's easiest."],
+                    after: ["Great job! Continue on to the next level."],
+                },
                 map:[
                     "bbbbbbb",
                     "b     b",
@@ -523,7 +236,7 @@
                     "bbbbbbb",
                 ]
             },
-            18: {
+            2: {
                 levelSize: 9,
                 gravityCharges: 5,
                 map:[
@@ -538,7 +251,7 @@
                     "bbbbbbbbb",
                 ]
             },
-            19: {
+            3: {
                 levelSize: 10,
                 gravityCharges: 8,
                 map:[
@@ -554,7 +267,7 @@
                     "bbbbbbbbbb",
                 ]
             },
-            20: {
+            4: {
                 levelSize: 13,
                 gravityCharges: 8,
                 map:[
@@ -573,7 +286,7 @@
                     "bbbbbbbbbbbbb",
                 ]
             },
-            21: {
+            5: {
                 levelSize: 15,
                 gravityCharges: 11,
                 map:[
@@ -594,7 +307,7 @@
                     "bbbbbbbbbbbbbbb",
                 ]
             },
-            22: {
+            6: {
                 levelSize: 15,
                 gravityCharges: 11,
                 map:[
@@ -615,7 +328,7 @@
                     "bbbbbbbbbbbbbbb",
                 ]
             },
-            23: {
+            7: {
                 levelSize: 15,
                 gravityCharges: 8,
                 map:[
@@ -636,7 +349,7 @@
                     "bbbbbbbbbbbbbbb",
                 ]
             },
-            24: {
+            8: {
                 levelSize: 15,
                 gravityCharges: 1,
                 map:[
@@ -657,7 +370,7 @@
                     "bbbbbbbbbbbbbbb",
                 ]
             },
-            25: {
+            9: {
                 levelSize: 15,
                 gravityCharges: 11,
                 map:[
@@ -678,7 +391,7 @@
                     "bbbbbbbbbbbbbbb",
                 ]
             },
-            26: {
+            10: {
                 levelSize: 15,
                 gravityCharges: 16,
                 map:[
@@ -735,14 +448,14 @@
                 this.touchingGround = true;
                 this.isFirstMove = true;
                 this.keyChecks = {
-                    left: true,
-                    right: true,
-                    up: true,
-                    down: true,
-                    w: true,
-                    a: true,
-                    s: true,
-                    d: true
+                    left: false,
+                    right: false,
+                    up: false,
+                    down: false,
+                    w: false,
+                    a: false,
+                    s: false,
+                    d: false
                 };
                 this.goalCountdown = -1;
                 this.shield = false;
@@ -755,7 +468,11 @@
                         if(this.goalCountdown >= 39){
                             ctx.drawImage(images.winAnimation, (14) * 16, 0, 16, 16, this.x, this.y, this.width, this.height)
                         } else{
-                            ctx.drawImage(images.winAnimation, (Math.floor((this.goalCountdown - 6) / 3)) * 16 , 0, 16, 16, this.x, this.y, this.width, this.height)
+                            if(this.goalCountdown <= 15){
+                                ctx.drawImage(images.winAnimation, 4 * 16, 0, 16, 16, this.x, this.y, this.width, this.height)
+                            } else{
+                                ctx.drawImage(images.winAnimation, (Math.floor((this.goalCountdown - 6) / 3)) * 16 , 0, 16, 16, this.x, this.y, this.width, this.height)
+                            }
                         }
                     } else{
                         ctx.drawImage(images.player, this.x, this.y, this.width, this.height)
@@ -864,7 +581,9 @@
                     if(checkGoalCollisions(this)){
                         this.x = checkGoalCollisions(this).x;
                         this.y = checkGoalCollisions(this).y;
-                        this.goalCountdown++;
+                        if(!isDialogue){
+                            this.goalCountdown++;
+                        }
                         if(this.goalCountdown === 0){
                             sounds.win.currentTime = 0;
                             sounds.win.volume = volume.masterVolume * volume.sfxVolume;
@@ -880,6 +599,15 @@
                             sounds.door.volume = volume.masterVolume * volume.sfxVolume;
                             sounds.door.play();
                         }
+
+                        if(this.goalCountdown === 60){
+                            if(levels[currentLevel].dialogue !== undefined){
+                                if(levels[currentLevel].dialogue.after !== undefined){
+                                    paragraph = levels[currentLevel].dialogue.after;
+                                } 
+                            }
+                        }
+
                         if(this.goalCountdown > 180){
                             currentLevel++;
                             if(currentLevel > Object.keys(levels).length){
@@ -887,13 +615,18 @@
                                 currentLevel--;
                             } else{
                                 resetLevel();
+                                if(levels[currentLevel].dialogue !== undefined){
+                                    if(levels[currentLevel].dialogue.before !== undefined){
+                                        paragraph = levels[currentLevel].dialogue.before
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
             handleGravityChanges(){
-                if((canChangeGravity || this.isFirstMove) && gravityCharges > 0){
+                if(((canChangeGravity || this.isFirstMove ) && !isDialogue) && gravityCharges > 0){
                     if(gravityPreset[0] !== 0 || gravityPreset[1] !== 0 && robotAnimationReady){
                         gravity = gravityPreset;
                         onGravityChange();
@@ -2051,7 +1784,7 @@
                 robotAnimation = "idle";
                 robotAnimationCountdown = 0;
             }
-            if((robotAnimation === "idle" || robotAnimation === "waiting") && (canChangeGravity || player.isFirstMove) && !checkGoalCollisions(player) && gravityCharges > 0){
+            if((robotAnimation === "idle" || robotAnimation === "waiting") && ((canChangeGravity || player.isFirstMove) && !isDialogue && isDialogue !== undefined) && !checkGoalCollisions(player) && gravityCharges > 0){
                 robotAnimation = "windup";
                 robotAnimationCountdown = 0;
             }
@@ -2131,6 +1864,7 @@
             c.drawImage(images.background, 0, 0, 480, 270);
             handleAtmosphericParticles();
             c.drawImage(images.floor, 0, 215, 480, 40);
+            c.drawImage(images.receiver, 230, 37, 20, 20)
             if(player.goalCountdown >= 40 && player.goalCountdown <= 60){
                 c.drawImage(images.door, Math.floor((player.goalCountdown - 40) / 3) * 17 , 0, 17, 24, 400, 119, 64, 96);
             } else if(player.goalCountdown < 60){
@@ -2157,8 +1891,151 @@
                     resetLevel();
                     resetCountdown = 60;
                 }
+            }  
+        }
+
+        let letters = [];
+        class Letter{
+            constructor(x, y, width, height, chara){
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.chara = chara;
+                this.selectionX = 0;
+                this.selectionY = 0;
+                this.offsetX = -20;
+                this.alpha = 0;
+            }
+            draw(){
+                this.selectionX = fontOrder.indexOf(this.chara) % 20;
+                this.selectionY = Math.floor(fontOrder.indexOf(this.chara) / 20);
+                context.globalAlpha = this.alpha;
+                context.drawImage(images.font, this.selectionX * 120 + this.offsetX,this.selectionY * 120,120,120,130 + this.x * 8, 190 + this.y * 10, this.width,this.height);
+                context.globalAlpha = 1;
+            }
+            update(){
+                this.alpha+=0.1;
+                this.offsetX+=2;
+                if(this.alpha > 1){
+                    this.alpha = 1;
+                }
+                if(this.offsetX > 0){
+                    this.offsetX = 0;
+                }
             }
         }
+
+        let sentence = "";
+        let paragraph = []; 
+        let letterX = 0;
+        let letterY = 0;
+        let letterFrame = 0;
+        let sentenceOver = false;
+        let canChangeDialogue = false;
+        let speedUp = false;
+        let boxY = 170;
+        let boxAlpha = 0;
+        let isDialogue = undefined;
+        function drawDialogue(){
+            if(!isDialogue){
+                speedUp = false;
+            }
+            context.clearRect(0,0,480,270)
+            if(isDialogue){
+                boxY++;
+                boxAlpha += 0.1;
+                if(boxY > 180){
+                    boxY = 180;
+                }
+                if(boxAlpha > 1){
+                    boxAlpha = 1;
+                }
+            } else{
+                boxY--;
+                boxAlpha -= 0.1;
+                if(boxY < 170){
+                    boxY = 170;
+                }
+                if(boxAlpha < 0){
+                    boxAlpha = 0;
+                }
+            }
+            context.globalAlpha = boxAlpha;
+            context.drawImage(images.dialogueBox,60,boxY,360,80);
+            if(isDialogue && sentenceOver){
+                context.globalAlpha = (Math.sin(performance.now() * 0.005) + 1.2) / 2 * 0.6;
+                context.drawImage(images.prompt, 210, 242, 60, 10);
+            }
+            context.globalAlpha = 1;
+            letterFrame++;
+            if(sentence.length <= 1 && boxY === 180){
+                if(paragraph.length > 0){
+                    if(letters.length > 0){
+                        sentenceOver = true;
+                    }
+                    sentence = paragraph[0];
+                    sentence = sentence + " ";
+                    paragraph.splice(0, 1);
+                } else{
+                    if(letters.length > 0){
+                        sentenceOver = true;
+                        sentence = "";
+                    }
+                }
+            }
+            if(paragraph.length > 0 || sentence.length > 0){
+                isDialogue = true;
+            }
+            if(letterFrame % 2 === 1 && !sentenceOver && boxY === 180){
+                let amount = 1;
+                if(speedUp){
+                    amount = 5;
+                }
+                for(let i = 0; i < amount; i++){
+                    letters.push(new Letter(letterX, letterY, 10, 10, sentence[0]));
+                    letterX++;
+                    if(sentence[0] === " "){
+                        let length = sentence.indexOf(" ", 1);
+                        if(letterX + length > 36){
+                            letterX = 0;
+                            letterY++;
+                            if(letterY > 4){
+                                sentence = sentence.slice(1);
+                                sentenceOver = true;
+                                break;
+                            }
+                        }
+                    }
+                    sentence = sentence.slice(1);
+                }
+            } 
+            if(key.space && !sentenceOver & canChangeDialogue){
+                speedUp = true;
+            }
+            if(sentenceOver && key.space && canChangeDialogue){
+                sentenceOver = false;
+                letters = [];
+                letterX = 0;
+                letterY = 0;
+                speedUp = false;
+                if(paragraph.length === 0 && sentence.length === 0){
+                    isDialogue = false;
+                }
+            }
+            if(key.space){
+                canChangeDialogue = false;
+            } else{
+                canChangeDialogue = true;
+            }
+            //context.drawImage(images.font, 120,120,120,120,125,185,20,20);
+            letters.forEach((letter)=>{
+                letter.draw();
+                letter.update();
+            })
+        }
+        
+        //createWord("\"Gerald!!!\"")
 
         function gameLoop(){
             if(!sounds.mainMenuMusic.paused){
@@ -2174,6 +2051,7 @@
             lastPressurePlatePressed = pressurePlatePressed;
             pressurePlatePressed = false;
             drawMainCanvas();
+            drawDialogue();
             drawBorder();
             handleDeath();
             updateButtons();
@@ -2200,6 +2078,9 @@
             }
             if(gameCanvas.style.display === "none"){
                 gameCanvas.style.display = "block";
+            }
+            if(dialogueCanvas.style.display === "none"){
+                dialogueCanvas.style.display = "block";
             }
         }
 
@@ -2461,9 +2342,17 @@
             }
         }
         resetLevel();
+        if(levels[currentLevel].dialogue !== undefined){
+            if(levels[currentLevel].dialogue.before !== undefined){
+                paragraph = levels[currentLevel].dialogue.before
+            }
+        }
         requestAnimationFrame(gameLoop);
         menuButtons = [];
         menuButtons.push(new MenuButton(440, 10, 30, 30, images.backButton, () => {
+            isDialogue = false;
+            paragraph = [];
+            sentence = "";
             gameOn = false;
             menu = "title";
             loadMenu();
@@ -2801,6 +2690,9 @@
         }
         if(gameCanvas.style.display = "block"){
             gameCanvas.style.display = "none";
+        }
+        if(dialogueCanvas.style.display = "block"){
+            dialogueCanvas.style.display = "none";
         }
         gameCanvas.style.display = "none";
         title = requestAnimationFrame(titleLoop);

@@ -14,9 +14,18 @@ body{
 #main-canvas{
     aspect-ratio: 16 / 9;
     image-rendering: pixelated;
+    image-rendering: crisp-edges;
     width: min(100vw, 177.7778vh);
     height: min(56.25vw, 100vh);
     background-color: rgb(20,20,20);
+    position: absolute;
+}
+#dialogue-canvas{
+    aspect-ratio: 16 / 9;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: min(100vw, 177.7778vh);
+    height: min(56.25vw, 100vh);
     position: absolute;
 }
 #game-canvas{
@@ -26,6 +35,7 @@ body{
     height: 400;
     transform: translate(-50%, -50%);
     image-rendering: pixelated;
+    image-rendering: crisp-edges;
     position: absolute;
     background-color: rgb(170,170,170);
 }
