@@ -66,6 +66,8 @@
     let images = {
         font: new Image(),
         prompt: new Image(),
+        tutorialBotTitle: new Image(),
+        geraldTitle: new Image(),
         player: new Image(),
         crate: new Image(),
         spike: new Image(),
@@ -121,7 +123,9 @@
         slider: new Image(),
         settings: new Image(),
         receiver: new Image(),
-        dialogueBox: new Image()
+        dialogueBox: new Image(),
+        tutorialBot: new Image(),
+        terabyte: new Image()
     }
     for(let i = 0; i < 256; i++){
         images.blocks.push(new Image());
@@ -139,7 +143,11 @@
     }
     
     images.font.src = "Images/font.png";
+    images.geraldTitle.src = "Images/geraldTitle.png";
     images.dialogueBox.src = "Images/dialogueBox.png";
+    images.tutorialBotTitle.src = "Images/tutorialBotTitle.png";
+    images.tutorialBot.src = "Images/tutorialBot.png";
+    images.terabyte.src = "Images/terabyte.png";
     images.settings.src = "Images/settings.png";
     images.leftArrow.src = "Images/leftArrow.png";
     images.rightArrow.src = "Images/rightArrow.png";
@@ -223,7 +231,7 @@
                 levelSize: 7,
                 gravityCharges: 5,
                 dialogue: {
-                    before: ["Welcome to the Gravitational Demo! I am TutorialBot, and I'm here to show you how to play the game.","Ignore the empty space to the left of the test, this is an early demo only accessible through a link, and this space will be filled with something else when I get around to coding it.","Use the Arrow Keys or WASD to change gravity.", "Changing the gravity costs one gravity charge.", "You can see how many gravity charges you have in the top-left corner.", "If you make a mistake, click the red reset charge below your gravity charges.", "Or just press r. Whatever's easiest.", "Get the cube with the red light to the energy transmitter."],
+                    before: ["Welcome to the Gravitational Demo! I am TutorialBot, and I'm here to show you how to play the game.","Use the Arrow Keys or WASD to change gravity.", "Changing the gravity costs one gravity charge.", "You can see how many gravity charges you have in the top-left corner.", "If you make a mistake, click the red reset charge below your gravity charges.", "Or just press r. Whatever's easiest.", "Get the cube with the red light to the energy transmitter. Good luck."],
                     after: ["Great job! Continue on to the next level."],
                 },
                 map:[
@@ -240,8 +248,8 @@
                 levelSize: 9,
                 gravityCharges: 5,
                 dialogue: {
-                    before: ["Gravity charge bubbles will give you one extra gravity charge when collected."],
-                    after: ["Not bad! Continue to level 3."],
+                    before: ["Gravity charge bubbles will give you one extra gravity charge when collected. Very useful."],
+                    after: ["Good job! Continue to level 3."],
                 },
                 map:[
                     "bbbbbbbbb",
@@ -280,7 +288,7 @@
                 gravityCharges: 8,
                 dialogue: {
                     before: ["You will find that not every gravity charge bubble has to be collected to beat a level.", "As a general rule, if you take more moves to get the gravity charges than the amount of charges you earn, you are doing something wrong.", "That said, calculate this level carefully."],
-                    after: ["Good job! You found the solution!"],
+                    after: ["That's another level beat. Moving onto level 5."],
                 },
                 map:[
                     "bbbbbbbbbbbbb",
@@ -327,8 +335,8 @@
                 levelSize: 15,
                 gravityCharges: 11,
                 dialogue: {
-                    before: ["Crates act just like the player, but they cannot activate the exit.", "Only the player can beat the level. This means that you can sometimes explode crates on spikes without losing the level.", "Use this information... wisely."],
-                    after: ["Well done! Onto level 7!"],
+                    before: ["Crates act just like the player, but they cannot activate the exit.", "Only the cube with the red light can activate the transmitter. This means that you can break crates on spikes without instantly losing the level.", "Use this information... wisely."],
+                    after: ["I have a feeling those crates will never question your authority again. Moving on."],
                 },
                 map:[
                     "bbbbbbbbbbbbbbb",
@@ -352,8 +360,8 @@
                 levelSize: 15,
                 gravityCharges: 8,
                 dialogue: {
-                    before: ["This one's a bit more complicated. Find a way to clear the crates blocking the player."],
-                    after: ["Good job! Onto the next level!"],
+                    before: ["Here's a random joke for you:", "What did the carrot say to the bunny?", "Beat the level to find out!"],
+                    after: ["Alright, here's the answer to that joke.", "It's nothing!", "What, did you think the carrot would be able to talk or something?"],
                 },
                 map:[
                     "bbbbbbbbbbbbbbb",
@@ -377,8 +385,8 @@
                 levelSize: 15,
                 gravityCharges: 1,
                 dialogue: {
-                    before: ["As you can see, you only get one gravity charge in this level.", "Use it wisely."],
-                    after: ["Moving on to the next room..."],
+                    before: ["As you can see, you only get one gravity charge in this level.", "Use it well."],
+                    after: ["Well solved."],
                 },
                 map:[
                     "bbbbbbbbbbbbbbb",
@@ -428,7 +436,7 @@
                 gravityCharges: 16,
                 dialogue: {
                     before: ["Well, this is it.", "The final level of the demo.", "If you want to see more, you'll have to wait until the full game comes out on STEAM.", "But until then, put everything you've learned together in this epic finale."],
-                    after: ["That's all for now! The full game will have 100 levels, a story, many other mechanics, and several npcs."],
+                    after: ["That's all for now! The full game will have 100 levels, a story, more bad jokes, many other mechanics, and several npcs."],
                 },
                 map:[
                     "bbbbbbbbbbbbbbb",
@@ -1869,6 +1877,18 @@
             }
             c.drawImage(images.robot, robotFrame * 48, 0, 48, 40, -14, 55, 192, 160)
         }
+        let npc = "tutorialBot";
+        let npcAnimationFrame = 0;
+        function drawNPCs(){
+            npcAnimationFrame++;
+            if(npc === "tutorialBot"){
+                if(npcAnimationFrame % 60 > 30){
+                    c.drawImage(images.tutorialBot, 0, 0, 13, 24, 340, 143, 39, 72);
+                } else{
+                    c.drawImage(images.tutorialBot, 13, 0, 13, 24, 340, 143, 39, 72);
+                }
+            } 
+        }
 
         let atmosphericParticleCountdown = 0;
         function handleAtmosphericParticles(){
@@ -1909,6 +1929,7 @@
                 c.drawImage(images.door, 6 * 17 , 0, 17, 24, 400, 119, 64, 96);
             }
             drawRobot();
+            drawNPCs();
         }
 
         function drawBorder(){
@@ -1947,7 +1968,7 @@
                 this.selectionX = fontOrder.indexOf(this.chara) % 20;
                 this.selectionY = Math.floor(fontOrder.indexOf(this.chara) / 20);
                 context.globalAlpha = this.alpha;
-                context.drawImage(images.font, this.selectionX * 120 + this.offsetX,this.selectionY * 120,120,120,130 + this.x * 8, 190 + this.y * 10, this.width,this.height);
+                context.drawImage(images.font, this.selectionX * 120 + this.offsetX,this.selectionY * 120,120,120,150 + this.x * 8, 190 + this.y * 10, this.width,this.height);
                 context.globalAlpha = 1;
             }
             update(){
@@ -1999,6 +2020,11 @@
             }
             context.globalAlpha = boxAlpha;
             context.drawImage(images.dialogueBox,60,boxY,360,80);
+            if(npc === "tutorialBot"){
+                context.drawImage(images.tutorialBotTitle, 70, boxY, 70, 70);
+            } else if(npc === "gerald"){
+                context.drawImage(images.geraldTitle, 70, boxY, 70, 70);
+            }
             if(isDialogue && sentenceOver){
                 context.globalAlpha = (Math.sin(performance.now() * 0.005) + 1.2) / 2 * 0.6;
                 context.drawImage(images.prompt, 210, 242, 60, 10);
@@ -2033,7 +2059,7 @@
                     letterX++;
                     if(sentence[0] === " "){
                         let length = sentence.indexOf(" ", 1);
-                        if(letterX + length > 36){
+                        if(letterX + length > 34){
                             letterX = 0;
                             letterY++;
                             if(letterY > 4){
