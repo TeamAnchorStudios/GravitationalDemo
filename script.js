@@ -66,6 +66,7 @@
     let images = {
         font: new Image(),
         prompt: new Image(),
+        demo: new Image(),
         tutorialBotTitle: new Image(),
         geraldTitle: new Image(),
         player: new Image(),
@@ -151,6 +152,7 @@
     images.settings.src = "Images/settings.png";
     images.leftArrow.src = "Images/leftArrow.png";
     images.rightArrow.src = "Images/rightArrow.png";
+    images.demo.src = "Images/demo.png";
     images.upArrow.src = "Images/upArrow.png";
     images.downArrow.src = "Images/downArrow.png";
     images.backButton.src = "Images/backButton.png";
@@ -2611,21 +2613,18 @@
         menuButtons = [];
         sliders = [];
         if(menu === "title"){
-            menuButtons.push(new MenuButton(210, 155, 60, 60, images.playButton, () => {
+            menuButtons.push(new MenuButton(150, 160, 50, 50, images.playButton, () => {
                 cancelAnimationFrame(title);
                 startGame(levelsUnlocked);    
                 curtainAlpha = 1;   
             }));
-            menuButtons.push(new MenuButton(305, 160, 50, 50, images.settingsButton, () => {
+            menuButtons.push(new MenuButton(280, 160, 50, 50, images.settingsButton, () => {
                 menu = "settings";
                 loadMenu();
             }));
             menuButtons.push(new MenuButton(118, 230, 244, 32, images.levelSelect, () => {
                 menu = "levelSelect1";
                 loadMenu();
-            }));
-            menuButtons.push(new MenuButton(125, 160, 50, 50, images.backButton, () => {
-
             }));
         }
         if(menu === "settings"){
@@ -2642,12 +2641,8 @@
                 menu = "title";
                 loadMenu();
             }));
-            menuButtons.push(new MenuButton(432, 230, 40, 32, images.rightArrow, () => {
-                menu = "levelSelect2";
-                loadMenu();
-            }));
             for(let i = 0; i < 5; i++){
-                for(let j = 0; j < 5; j++){
+                for(let j = 0; j < 2; j++){
                     if(j * 5 + i + 1 <= levelsUnlocked){
                         menuButtons.push(new MenuButton(i * 70 + 75, j * 50 + 15, 40, 40, images.levels[j * 5 + i], () => {
                             cancelAnimationFrame(title);
@@ -2760,7 +2755,8 @@
         title = requestAnimationFrame(titleLoop);
         c.clearRect(0,0,480,270);
         if(menu === "title"){
-            c.drawImage(images.title, 30, 60, 460, 92);
+            c.drawImage(images.title, 30, 40, 460, 92);
+            c.drawImage(images.demo, 162, 115, 156, 30)
         }
         if(menu === "settings"){
             c.drawImage(images.settings, 0, 0, 480, 270);
